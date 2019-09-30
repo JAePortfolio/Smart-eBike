@@ -19,7 +19,7 @@ This project is a Smart eBike Conversion Kit. This is a kit that will allow the 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is NOT open source.
 
 ## Acknowledgments
 
