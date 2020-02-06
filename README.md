@@ -7,7 +7,7 @@ This project is a Smart eBike Conversion Kit. This is a kit that will allow the 
 
 ## Built With
 
-* [Raspberry PI 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) - Controller
+* [Raspberry PI 3 B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) - Controller
 * [EXAMPLE](https://en.wikipedia.org/wiki/Cascading_Style_Sheets) - EXAMPLE
 
 ## Authors
