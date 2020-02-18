@@ -46,7 +46,8 @@ void loop()
     tmr.run();
 }
 
-
+#include <time.h> /* Will be used for MPH */
+#include <cmath>
 int main(int argc, char* argv[])
 {
     parse_options(argc, argv, auth, serv, port);
@@ -54,6 +55,27 @@ int main(int argc, char* argv[])
     setup();
     while(true) {
         loop();
+    }
+
+    int wheelSensorGoLowCounter = 1;
+    time_t currentTime_1, currentTime_2;
+    double timeDifferenceSeconds, milesPerHour;
+    if(PIN_8 == LOGIC_LOW){
+      if(wheelSensorGoLowCounter == 1){
+        time(&currentTime_1); // sets currentTime_1
+        wheelSensorGoLowCounter++;
+      }
+      else if(wheelSensorGoLowCounter == 2){
+        time(&currentTime_2)
+        timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
+        time(&currentTime_1);
+        signalCounter = 1;
+      }
+      else;
+    }
+
+    double speedometerReadingCalculation(double totalTime){
+      milesPerHour = (2*M_PI*(1.083)*60*60)/(5280*totalTime)
     }
 
     return 0;
