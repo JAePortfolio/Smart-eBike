@@ -1,7 +1,7 @@
 #!/bin/bash
 
 case "$1" in
-raspberry
+raspberry)
     make clean all target=raspberry
     exit 0
     ;;
