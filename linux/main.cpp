@@ -38,7 +38,9 @@ void setup()
     tmr.setInterval(1000, [](){
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
+
 }
+
 
 void loop()
 {
@@ -48,34 +50,49 @@ void loop()
 
 #include <time.h> /* Will be used for MPH */
 #include <cmath>
+
+int wheelSensorGoLowCounter = 1;
+double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
+time_t currentTime_1, currentTime_2
+
+pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
+
+/* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
+
+void readSpeedometerSignal(int pinNumber){
+  if(int digitalRead(int pinNumber) == 0){ // Active Low Hall Sensor
+    speedometerFunction();
+    }
+}
+
+void speedometerFunction(){
+  if(wheelSensorGoLowCounter == 1){
+    time(&currentTime_1); // sets currentTime_1 to current time
+    wheelSensorGoLowCounter++;
+  }
+  else if(wheelSensorGoLowCounter == 2){
+    time(&currentTime_2);
+    timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
+    speedometerReadingCalculation(timeDifferenceSeconds);
+    Blynk.virtualWrite(V2,milesPerHour);
+    time(&currentTime_1);
+    wheelSensorGoLowCounter = 1;
+  }
+}
+
+double speedometerReadingCalculation(double totalTime){
+  milesPerHour = (2*M_PI*(1.083)*60*60)/(5280*totalTime)
+  return milesPerHour;
+}
+
 int main(int argc, char* argv[])
 {
     parse_options(argc, argv, auth, serv, port);
 
     setup();
     while(true) {
+        readSpeedometerSignal(1); 
         loop();
-    }
-
-    int wheelSensorGoLowCounter = 1;
-    time_t currentTime_1, currentTime_2;
-    double timeDifferenceSeconds, milesPerHour;
-    if(PIN_8 == LOGIC_LOW){
-      if(wheelSensorGoLowCounter == 1){
-        time(&currentTime_1); // sets currentTime_1
-        wheelSensorGoLowCounter++;
-      }
-      else if(wheelSensorGoLowCounter == 2){
-        time(&currentTime_2)
-        timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
-        time(&currentTime_1);
-        signalCounter = 1;
-      }
-      else;
-    }
-
-    double speedometerReadingCalculation(double totalTime){
-      milesPerHour = (2*M_PI*(1.083)*60*60)/(5280*totalTime)
     }
 
     return 0;
