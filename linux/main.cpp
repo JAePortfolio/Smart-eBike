@@ -70,13 +70,9 @@ time_t currentTime_1, currentTime_2;
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(int pinNumber){
-  if(int digitalRead(int pinNumber) == 0){ // Active Low Hall Sensor
+  if(digitalRead(int pinNumber) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
     }
-}
-
-void readSpeedometerSignal(int pinNumber)
-{
 }
 
 void speedometerFunction(){
