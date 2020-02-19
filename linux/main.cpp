@@ -1,10 +1,8 @@
 /**
  * @file       main.cpp
- * @author     Volodymyr Shymanskyy
- * @license    This project is released under the MIT License (MIT)
- * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
- * @date       Mar 2015
- * @brief
+ * @authors    John Arena, Shamim Babul, Rona Kosumi, Ionut Rotariu
+ * @license    This project is NOT released under any license.
+ * @date       Sept 2019-May 2020
  */
 
 //#define BLYNK_DEBUG
