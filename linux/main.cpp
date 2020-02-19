@@ -64,7 +64,7 @@ void speedometerReadingCalculation(double totalTime);
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
-time_t currentTime_1, currentTime_2
+time_t currentTime_1, currentTime_2;
 
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
