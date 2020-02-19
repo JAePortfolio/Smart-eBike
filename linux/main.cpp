@@ -39,6 +39,8 @@ void setup()
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
 
+	GPIO.pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
+
 }
 
 
@@ -48,6 +50,13 @@ void loop()
     tmr.run();
 }
 
+#ifndef OUR_FUNCTION_HEADERS_
+#define OUR_FUNCTION_HEADERS_
+void readSpeedometerSignal(int pinNumber);
+void speedometerFunction();
+void speedometerReadingCalculation(double totalTime);
+#endif
+
 #include <time.h> /* Will be used for MPH */
 #include <cmath>
 
@@ -55,14 +64,17 @@ int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 time_t currentTime_1, currentTime_2
 
-pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(int pinNumber){
   if(int digitalRead(int pinNumber) == 0){ // Active Low Hall Sensor
-    speedometerFunction();
+	  speedometerFunction();
     }
+}
+
+void readSpeedometerSignal(int pinNumber)
+{
 }
 
 void speedometerFunction(){
@@ -80,9 +92,8 @@ void speedometerFunction(){
   }
 }
 
-double speedometerReadingCalculation(double totalTime){
+void speedometerReadingCalculation(double totalTime){
   milesPerHour = (2*M_PI*(1.083)*60*60)/(5280*totalTime)
-  return milesPerHour;
 }
 
 int main(int argc, char* argv[])
