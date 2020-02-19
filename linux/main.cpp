@@ -50,6 +50,8 @@ void loop()
     tmr.run();
 }
 
+/* OUR FUNCTIONS, VARIABLES, ETC BELOW*/
+
 #ifndef OUR_FUNCTION_HEADERS_
 #define OUR_FUNCTION_HEADERS_
 void readSpeedometerSignal(int pinNumber);
@@ -93,7 +95,7 @@ void speedometerFunction(){
 }
 
 void speedometerReadingCalculation(double totalTime){
-  milesPerHour = (2*M_PI*(1.083)*60*60)/(5280*totalTime)
+	milesPerHour = (2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
 }
 
 int main(int argc, char* argv[])
