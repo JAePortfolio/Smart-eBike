@@ -39,7 +39,7 @@ void setup()
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
 
-	GPIO.pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
+	pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
 
 }
 
@@ -70,7 +70,7 @@ time_t currentTime_1, currentTime_2;
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(int pinNumber){
-  if(digitalRead(int pinNumber) == 0){ // Active Low Hall Sensor
+  if(digitalRead(pinNumber) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
     }
 }
