@@ -30,6 +30,7 @@ void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
 #endif
 
+int test = 5;
 
 
 BlynkTimer tmr;
@@ -47,7 +48,7 @@ void setup()
     });
     
   pinMode(5, INPUT); // GPIO 5 reserved for Speedometer, pin 29
-  tmr.setInterval(1000L,readSpeedometerSignal(5)); // Call every second
+  tmr.setInterval(1000L,readSpeedometerSignal(test)); // Call every second
 
 }
 
