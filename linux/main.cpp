@@ -55,7 +55,7 @@ void setup()
     });
     
   pinMode(5, INPUT); // GPIO 5, pin 29
-  tmr.setInterval(500L,readSpeedometerSignal); // Call every .5 seconds
+  tmr.setInterval(10L,readSpeedometerSignal); // Call every .5 seconds
 
 }
 
