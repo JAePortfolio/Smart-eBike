@@ -23,6 +23,15 @@ static uint16_t port;
 
 #include <BlynkWidgets.h>
 
+#ifndef OUR_FUNCTION_HEADERS_
+#define OUR_FUNCTION_HEADERS_
+void readSpeedometerSignal(int pinNumber);
+void speedometerFunction();
+void speedometerReadingCalculation(double totalTime);
+#endif
+
+
+
 BlynkTimer tmr;
 
 BLYNK_WRITE(V1)
@@ -51,12 +60,6 @@ void loop()
 
 /* OUR FUNCTIONS, VARIABLES, ETC BELOW*/
 
-#ifndef OUR_FUNCTION_HEADERS_
-#define OUR_FUNCTION_HEADERS_
-void readSpeedometerSignal(int pinNumber);
-void speedometerFunction();
-void speedometerReadingCalculation(double totalTime);
-#endif
 
 #include <time.h> /* Will be used for MPH */
 #include <cmath>
