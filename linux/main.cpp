@@ -25,7 +25,7 @@ static uint16_t port;
 
 #ifndef OUR_FUNCTION_HEADERS_
 #define OUR_FUNCTION_HEADERS_
-void readSpeedometerSignal(int pinNumber);
+void readSpeedometerSignal();
 void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
 #endif
