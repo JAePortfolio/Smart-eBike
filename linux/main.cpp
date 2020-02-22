@@ -48,7 +48,7 @@ void setup()
     });
     
   pinMode(5, INPUT); // GPIO 5 reserved for Speedometer, pin 29
-  tmr.setInterval(1000L,readSpeedometerSignal(test)); // Call every second
+  tmr.setInterval(1000L,readSpeedometerSignal; // Call every second
 
 }
 
@@ -72,8 +72,8 @@ time_t currentTime_1, currentTime_2;
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
-void readSpeedometerSignal(int pinNumber){
-  if(digitalRead(pinNumber) == LOW){ // Active Low Hall Sensor
+void readSpeedometerSignal(){
+  if(digitalRead(test) == LOW){ // Active Low Hall Sensor
 	  speedometerFunction();
     }
 }
