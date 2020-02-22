@@ -23,6 +23,8 @@ static uint16_t port;
 
 #include <BlynkWidgets.h>
 
+/* OUR FUNCTIONS, VARIABLES, ETC BELOW*/
+
 #ifndef OUR_FUNCTION_HEADERS_
 #define OUR_FUNCTION_HEADERS_
 void readSpeedometerSignal();
@@ -30,8 +32,13 @@ void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
 #endif
 
-int test = 5;
+#include <time.h> /* Will be used for MPH */
+#include <cmath>
 
+int wheelSensorGoLowCounter = 1;
+double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
+time_t currentTime_1, currentTime_2;
+int gpioSpeedometer = 5;
 
 BlynkTimer tmr;
 
@@ -47,11 +54,10 @@ void setup()
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
     
-  pinMode(5, INPUT); // GPIO 5 reserved for Speedometer, pin 29
-  tmr.setInterval(1000L,readSpeedometerSignal); // Call every second
+  pinMode(5, INPUT); // GPIO 5, pin 29
+  tmr.setInterval(500L,readSpeedometerSignal); // Call every .5 seconds
 
 }
-
 
 void loop()
 {
@@ -59,21 +65,10 @@ void loop()
     tmr.run();
 }
 
-/* OUR FUNCTIONS, VARIABLES, ETC BELOW*/
-
-
-#include <time.h> /* Will be used for MPH */
-#include <cmath>
-
-int wheelSensorGoLowCounter = 1;
-double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
-time_t currentTime_1, currentTime_2;
-
-
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(){
-  if(digitalRead(test) == LOW){ // Active Low Hall Sensor
+  if(digitalRead(gpioSpeedometer) == LOW){ // Active Low Hall Sensor
 	  speedometerFunction();
     }
 }
