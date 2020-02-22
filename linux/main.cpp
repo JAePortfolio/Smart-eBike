@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 
     setup();
     while(true) {
-        readSpeedometerSignal(1); 
+        readSpeedometerSignal(2); 
         loop();
     }
 
