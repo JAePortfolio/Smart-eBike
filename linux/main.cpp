@@ -37,7 +37,7 @@ void setup()
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
 
-	pinMode(1, INPUT); // GPIO 1 reserved for Speedometer
+	pinMode(5, INPUT); // GPIO 1 reserved for Speedometer
 
 }
 
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 
     setup();
     while(true) {
-        readSpeedometerSignal(2); 
+        readSpeedometerSignal(5); 
         loop();
     }
 
