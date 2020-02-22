@@ -36,8 +36,9 @@ void setup()
     tmr.setInterval(1000, [](){
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
-
-	pinMode(5, INPUT); // GPIO 1 reserved for Speedometer
+    
+  pinMode(5, INPUT); // GPIO 5 reserved for Speedometer, pin 29
+  tmr.setInterval(1000L,readSpeedometerSignal(5)); // Call every second
 
 }
 
@@ -68,7 +69,7 @@ time_t currentTime_1, currentTime_2;
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(int pinNumber){
-  if(digitalRead(pinNumber) == 0){ // Active Low Hall Sensor
+  if(digitalRead(pinNumber) == LOW){ // Active Low Hall Sensor
 	  speedometerFunction();
     }
 }
@@ -82,7 +83,7 @@ void speedometerFunction(){
     time(&currentTime_2);
     timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
     speedometerReadingCalculation(timeDifferenceSeconds);
-    Blynk.virtualWrite(V2,milesPerHour);
+    Blynk.virtualWrite(V5,milesPerHour);
     time(&currentTime_1);
     wheelSensorGoLowCounter = 1;
   }
@@ -98,7 +99,6 @@ int main(int argc, char* argv[])
 
     setup();
     while(true) {
-        readSpeedometerSignal(5); 
         loop();
     }
 
