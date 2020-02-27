@@ -34,6 +34,9 @@ void speedometerReadingCalculation(double totalTime);
 
 #include <time.h> /* Will be used for MPH */
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
@@ -70,18 +73,24 @@ void loop()
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == LOW){ // Active Low Hall Sensor
 	  speedometerFunction();
+	  cout << "GPIO PIN is LOW" << endl;
     }
 }
 
 void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
     time(&currentTime_1); // sets currentTime_1 to current time
+	printf("currentTime_1 %s", ctime(&currentTime_1));
     wheelSensorGoLowCounter++;
+	cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << endl;
   }
   else if(wheelSensorGoLowCounter == 2){
     time(&currentTime_2);
+	printf("currentTime_2 %s", ctime(&currentTime_2));
     timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
+	cout << "timeDifferenceSeconds:" << timeDifferenceSeconds << endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
+	cout << "MPH:" << milesPerHour << endl;
     Blynk.virtualWrite(V5,milesPerHour);
     time(&currentTime_1);
     wheelSensorGoLowCounter = 1;
