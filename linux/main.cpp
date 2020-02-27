@@ -41,7 +41,7 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 time_t currentTime_1, currentTime_2;
-int gpioSpeedometer = 5;
+int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
 
@@ -57,7 +57,7 @@ void setup()
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
     
-  pinMode(5, INPUT); // GPIO 5, pin 29
+  pinMode(12, INPUT); // GPIO 12, pin 32
   tmr.setInterval(10L,readSpeedometerSignal); // Call every .5 seconds
 
 }
@@ -91,7 +91,7 @@ void speedometerFunction(){
 	cout << "timeDifferenceSeconds:" << timeDifferenceSeconds << endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	cout << "MPH:" << milesPerHour << endl;
-    Blynk.virtualWrite(V5,milesPerHour);
+    Blynk.virtualWrite(V12,milesPerHour);
     time(&currentTime_1);
     wheelSensorGoLowCounter = 1;
   }
