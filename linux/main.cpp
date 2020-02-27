@@ -71,7 +71,7 @@ void loop()
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
 void readSpeedometerSignal(){
-  if(digitalRead(gpioSpeedometer) == LOW){ // Active Low Hall Sensor
+  if(digitalRead(gpioSpeedometer) == HIGH){ // Active Low Hall Sensor
 	  speedometerFunction();
 	  cout << "GPIO PIN is LOW" << endl;
     }
