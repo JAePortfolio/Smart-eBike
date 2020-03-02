@@ -105,7 +105,7 @@ void speedometerFunction(){
 	timeDifferenceSeconds = currentTime_2 - currentTime_1;
 	cout << "timeDifferenceSeconds:" << timeDifferenceSeconds << endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
-	cout << "MPH:" << milesPerHour << endl;
+	cout << "MPH:" << milesPerHour << setprecision(5) << endl;
     Blynk.virtualWrite(V12,milesPerHour);
     time(&currentTime_1);
     wheelSensorGoLowCounter = 1;
