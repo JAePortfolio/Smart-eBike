@@ -101,7 +101,8 @@ void speedometerFunction(){
   else if(wheelSensorGoLowCounter == 2){
     time(&currentTime_2);
 	printf("currentTime_2 %s", ctime(&currentTime_2));
-    timeDifferenceSeconds = difftime(currentTime_2.tv_usec,currentTime_1.tv_usec);
+    //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
+	timeDifferenceSeconds = currentTime_2 - currentTime_1;
 	cout << "timeDifferenceSeconds:" << timeDifferenceSeconds << endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	cout << "MPH:" << milesPerHour << endl;
