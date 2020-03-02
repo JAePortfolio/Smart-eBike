@@ -30,6 +30,7 @@ static uint16_t port;
 void readSpeedometerSignal();
 void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
+void readPIN();
 #endif
 
 #include <time.h> /* Will be used for MPH */
@@ -58,7 +59,8 @@ void setup()
     });
     
   pinMode(12, INPUT); // GPIO 12, pin 32
-  tmr.setInterval(10L,readSpeedometerSignal); // Call every .5 seconds
+  //tmr.setInterval(500L,readSpeedometerSignal); // Call every .5 seconds
+  tmr.setInterval(5000L, readPIN); // Testing how to read pin function
 
 }
 
@@ -69,6 +71,18 @@ void loop()
 }
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
+
+void readPIN() {
+	//if (digitalRead(12) == LOW) {
+	//	cout << "GPIO PIN IS LOW" << endl;
+	//}
+	//else if (digitalRead(12) == HIGH) {
+	//	cout << "GPIO PIN IS HIGH" << endl;
+	//}
+	//else {};
+	int pinstatus = digitalRead(12);
+	cout << "Pin status of 12 is: " << pinstatus << "." << endl;
+}
 
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == HIGH){ // Active Low Hall Sensor
