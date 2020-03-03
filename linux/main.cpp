@@ -112,7 +112,8 @@ void speedometerFunction(){
     speedometerReadingCalculation(timeDifferenceSeconds);
 	cout << "MPH:" << milesPerHour << setprecision(5) << endl;
     Blynk.virtualWrite(V12,milesPerHour);
-    time(&currentTime_1);
+    //time(&currentTime_1);
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
     wheelSensorGoLowCounter = 1;
   }
 }
