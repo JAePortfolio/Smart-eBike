@@ -37,7 +37,7 @@ void readPIN();
 #include <cmath>
 #include <iostream>
 #include <iomanip>      
-using namespace std;
+//using namespace std;
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
@@ -83,13 +83,13 @@ void readPIN() {
 	//}
 	//else {};
 	int pinstatus = digitalRead(12);
-	cout << "Pin status of 12 is: " << pinstatus << "." << endl;
+	std::cout << "Pin status of 12 is: " << pinstatus << "." << std::endl;
 }
 
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
-	  cout << "GPIO PIN is LOW" << endl;
+	  std::cout << "GPIO PIN is LOW" << std::endl;
     }
 }
 
@@ -99,7 +99,7 @@ void speedometerFunction(){
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
 	wheelSensorGoLowCounter++;
-	cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << endl;
+	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
   }
   else if(wheelSensorGoLowCounter == 2){
     //time(&currentTime_2);
@@ -108,9 +108,9 @@ void speedometerFunction(){
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
 	totalTime = end.tv_nsec - start.tv_nsec;
-	cout << "timeDifferenceSeconds:" << totalTime << endl;
+	std::cout << "timeDifferenceSeconds:" << totalTime << std::endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
-	cout << "MPH:" << milesPerHour << setprecision(5) << endl;
+	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
     //time(&currentTime_1);
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
