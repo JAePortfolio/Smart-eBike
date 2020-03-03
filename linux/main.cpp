@@ -94,7 +94,7 @@ void speedometerFunction(){
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	totalTime = (secondTime.tv_nsec - firstTime.tv_nsec) * 1e9;
+	totalTime = (secondTime.tv_nsec - firstTime.tv_nsec) * 1e-9;
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	std::cout << "MPH:" << milesPerHour << std::endl;
