@@ -86,7 +86,10 @@ void speedometerFunction(){
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
-  else if(wheelSensorGoLowCounter == 2){
+  else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
+	  wheelSensorGoLowCounter++;
+  }
+  else if(wheelSensorGoLowCounter == 10){
 	currentTime_2 = clock();
 	std::cout << "time 2: " << currentTime_2 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
@@ -95,13 +98,13 @@ void speedometerFunction(){
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
-	currentTime_1 = clock();
 	wheelSensorGoLowCounter = 1;
   }
+  else{}
 }
 
 void speedometerReadingCalculation(double totalTime){
-	milesPerHour = (2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
+	milesPerHour = (5* 2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
 }
 
 int main(int argc, char* argv[])
