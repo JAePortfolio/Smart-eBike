@@ -102,8 +102,8 @@ void speedometerFunction(){
 	cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << endl;
   }
   else if(wheelSensorGoLowCounter == 2){
-    time(&currentTime_2);
-	printf("currentTime_2 %s", ctime(&currentTime_2));
+    //time(&currentTime_2);
+	//printf("currentTime_2 %s", ctime(&currentTime_2));
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
