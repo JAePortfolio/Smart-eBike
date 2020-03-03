@@ -41,8 +41,7 @@ void speedometerReadingCalculation(double totalTime);
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 //time_t currentTime_1, currentTime_2;
-long totalTime;
-struct timespec firstTime, secondTime;
+clock_t firstTime, secondTime;
 int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
@@ -84,7 +83,8 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
     //time(&currentTime_1); // sets currentTime_1 to current time
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
+	  firstTime = clock();
 	wheelSensorGoLowCounter++;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
   }
@@ -92,10 +92,11 @@ void speedometerFunction(){
     //time(&currentTime_2);
 	//printf("currentTime_2 %s", ctime(&currentTime_2));
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	totalTime = (secondTime.tv_nsec - firstTime.tv_nsec) * 1e-9;
-	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
+	  secondTime = clock();
+	  totalTime = double(secondTime-firstTime)/double(CLOCKS_PER_SEC);
+	std::cout << "timeDifferenceSeconds:" << totalTime  << setprecision(5) << std::endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
