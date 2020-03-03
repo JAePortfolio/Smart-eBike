@@ -104,7 +104,7 @@ void speedometerFunction(){
 }
 
 void speedometerReadingCalculation(double totalTime){
-	milesPerHour = (5* 2 * M_PI*(.0416) * 60 * 60) / (5280 * totalTime);
+	milesPerHour = (5* 2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
 }
 
 int main(int argc, char* argv[])
