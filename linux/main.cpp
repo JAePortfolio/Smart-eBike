@@ -101,7 +101,7 @@ void speedometerFunction(){
 	firstTime = clock() - firstTime;
 	std::cout << "time 2: " << firstTime << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
-	totalTime = firstTime/double(CLOCKS_PER_SEC);
+	totalTime = firstTime* 1e-3;
 	//totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
