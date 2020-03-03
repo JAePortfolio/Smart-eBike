@@ -98,7 +98,7 @@ void speedometerFunction(){
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
 	  //secondTime = clock();
 	 //totalTime = double(secondTime-firstTime)/double(CLOCKS_PER_SEC);
-	totalTime = secondTime - firstTime;
+	totalTime = secondTime.tv_sec - firstTime.tv_sec;
 	std::cout << "timeDifferenceSeconds:" << totalTime  << setprecision(5) << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
