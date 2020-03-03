@@ -102,8 +102,9 @@ void speedometerFunction(){
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
     //time(&currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
-    wheelSensorGoLowCounter = 1;
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
+	firstTime = clock();
+	wheelSensorGoLowCounter = 1;
   }
 }
 
