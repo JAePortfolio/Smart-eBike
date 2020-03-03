@@ -40,11 +40,8 @@ void speedometerReadingCalculation(double totalTime);
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
-//time_t currentTime_1, currentTime_2;
 double totalTime;
-//struct timespec firstTime, secondTime;
-clock_t firstTime, secondTime;
-//long totalLongTime = 0;
+clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
@@ -84,32 +81,21 @@ void readSpeedometerSignal(){
 
 void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
-    //time(&currentTime_1); // sets currentTime_1 to current time
-	//printf("currentTime_1 %s", ctime(&currentTime_1));
-	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
-	firstTime = clock();
-	std::cout << "time 1: " << firstTime << std::endl;
+	currentTime_1 = clock(); // Records time of reading
+	std::cout << "time 1: " << currentTime_1 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
   else if(wheelSensorGoLowCounter == 2){
-    //time(&currentTime_2);
-	//printf("currentTime_2 %s", ctime(&currentTime_2));
-    //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
-	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
-	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	firstTime = clock() - firstTime;
-	std::cout << "time 2: " << firstTime << std::endl;
+	currentTime_2 = clock();
+	std::cout << "time 2: " << currentTime_2 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
-	totalTime = firstTime* 1e-3;
-	//totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
+	totalTime = (currentTime_2 - currentTime_1) * 1e-3; //milliseconds to seconds
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
-    //time(&currentTime_1);
-	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
-	firstTime = clock();
+	currentTime_1 = clock();
 	wheelSensorGoLowCounter = 1;
   }
 }
