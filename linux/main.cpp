@@ -41,8 +41,8 @@ using namespace std;
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
-time_t currentTime_1, currentTime_2;
-long time;
+//time_t currentTime_1, currentTime_2;
+long totalTime;
 struct timespec start, end;
 int gpioSpeedometer = 12;
 
@@ -107,8 +107,8 @@ void speedometerFunction(){
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
 	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	time = end.tv_nsec - start.tv_nsec;
-	cout << "timeDifferenceSeconds:" << time << endl;
+	totalTime = end.tv_nsec - start.tv_nsec;
+	cout << "timeDifferenceSeconds:" << totalTime << endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	cout << "MPH:" << milesPerHour << setprecision(5) << endl;
     Blynk.virtualWrite(V12,milesPerHour);
