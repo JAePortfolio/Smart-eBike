@@ -88,7 +88,7 @@ void speedometerFunction(){
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
 	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
 	firstTime = clock();
-	std::cout << "time 1" << firstTime << std::endl;
+	std::cout << "time 1: " << firstTime << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
@@ -99,7 +99,7 @@ void speedometerFunction(){
 	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
 	firstTime = clock() - firstTime;
-	std::cout << "time 2" << firstTime << std::endl;
+	std::cout << "time 2: " << firstTime << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	totalTime = firstTime/double(CLOCKS_PER_SEC);
 	//totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
