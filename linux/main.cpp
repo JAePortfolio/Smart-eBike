@@ -29,7 +29,7 @@ static uint16_t port;
 #define OUR_FUNCTION_HEADERS_
 void readSpeedometerSignal();
 void speedometerFunction();
-void speedometerReadingCalculation(double totalTime);
+void speedometerReadingCalculation(long totalTime);
 #endif
 
 #include <time.h> /* Will be used for MPH */
@@ -44,6 +44,7 @@ double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
 struct timespec firstTime, secondTime;
 //clock_t firstTime, secondTime;
+long totalLongTime = 0;
 int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
@@ -98,9 +99,9 @@ void speedometerFunction(){
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
 	  //secondTime = clock();
 	 //totalTime = double(secondTime-firstTime)/double(CLOCKS_PER_SEC);
-	totalTime = secondTime.tv_sec - firstTime.tv_sec;
-	std::cout << "timeDifferenceSeconds:" << totalTime  << setprecision(5) << std::endl;
-    speedometerReadingCalculation(totalTime);
+	totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
+	std::cout << "timeDifferenceSeconds:" << totalLongTime  << setprecision(5) << std::endl;
+    speedometerReadingCalculation(totalLongTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
     //time(&currentTime_1);
@@ -110,7 +111,7 @@ void speedometerFunction(){
   }
 }
 
-void speedometerReadingCalculation(double totalTime){
+void speedometerReadingCalculation(long totalTime){
 	milesPerHour = (2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
 }
 
