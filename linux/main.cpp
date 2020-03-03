@@ -29,7 +29,7 @@ static uint16_t port;
 #define OUR_FUNCTION_HEADERS_
 void readSpeedometerSignal();
 void speedometerFunction();
-void speedometerReadingCalculation(long totalTime);
+void speedometerReadingCalculation(double totalTime);
 #endif
 
 #include <time.h> /* Will be used for MPH */
@@ -42,9 +42,9 @@ int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 //time_t currentTime_1, currentTime_2;
 double totalTime;
-struct timespec firstTime, secondTime;
-//clock_t firstTime, secondTime;
-long totalLongTime = 0;
+//struct timespec firstTime, secondTime;
+clock_t firstTime, secondTime;
+//long totalLongTime = 0;
 int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
@@ -86,32 +86,33 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
     //time(&currentTime_1); // sets currentTime_1 to current time
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
-	//firstTime = clock();
-	wheelSensorGoLowCounter++;
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
+	firstTime = clock();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
+	wheelSensorGoLowCounter++;
   }
   else if(wheelSensorGoLowCounter == 2){
+	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
     //time(&currentTime_2);
 	//printf("currentTime_2 %s", ctime(&currentTime_2));
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	  //secondTime = clock();
-	 //totalTime = double(secondTime-firstTime)/double(CLOCKS_PER_SEC);
-	totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
-	std::cout << "timeDifferenceSeconds:" << totalLongTime  << setprecision(5) << std::endl;
-    speedometerReadingCalculation(totalLongTime);
+	firstTime = clock() - firstTime;
+	totalTime = firstTime/(CLOCKS_PER_SEC);
+	//totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
+	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
+    speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
     //time(&currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
-	//firstTime = clock();
+	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
+	firstTime = clock();
 	wheelSensorGoLowCounter = 1;
   }
 }
 
-void speedometerReadingCalculation(long totalTime){
+void speedometerReadingCalculation(double totalTime){
 	milesPerHour = (2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
 }
 
