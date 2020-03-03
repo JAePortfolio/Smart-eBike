@@ -1,4 +1,6 @@
 /**
+ * g++ llv3.cpp lidarlite_v3.cpp -I . -o llv3.out
+ * ./blynk --token=fvgRS5ENeJVCVi53MyPXRc7e7NFvNlpX
  * @file       main.cpp
  * @authors    John Arena, Shamim Babul, Rona Kosumi, Ionut Rotariu
  * @license    This project is NOT released under any license.
@@ -14,6 +16,17 @@
 #endif
 #include <BlynkSocket.h>
 #include <BlynkOptionsParser.h>
+#include <linux/types.h>
+#include <cstdio>
+
+#include <lidarlite_v3.h>
+#include <iostream>
+#include <fstream>
+#include <chrono>	
+
+using namespace std;
+
+LIDARLite_v3 myLidarLite;
 
 static BlynkTransportSocket _blynkTransport;
 BlynkSocket Blynk(_blynkTransport);
@@ -62,12 +75,34 @@ void setup()
   tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
   //tmr.setInterval(5000L, readPIN); // Testing how to read pin function
 
+    // Initialize i2c peripheral in the cpu core
+    myLidarLite.i2c_init();
+
+    // Optionally configure LIDAR-Lite
+    myLidarLite.configure(0);
+
+}
+
+void UpdateLidar()
+{
+	__u16 distance;
+	__u8  busyFlag;
+	busyFlag = myLidarLite.getBusyFlag();
+	
+	if (busyFlag == 0x00)
+	{
+		myLidarLite.takeRange();
+		distance = myLidarLite.readDistance();
+		cout << "Distance: "<<distance<<" cm"<<endl;
+		Blynk.virtualWrite(V20, (int)distance);
+        }
 }
 
 void loop()
 {
     Blynk.run();
     tmr.run();
+    UpdateLidar();
 }
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
