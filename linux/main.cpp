@@ -30,7 +30,6 @@ static uint16_t port;
 void readSpeedometerSignal();
 void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
-void readPIN();
 #endif
 
 #include <time.h> /* Will be used for MPH */
@@ -43,7 +42,7 @@ int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 //time_t currentTime_1, currentTime_2;
 long totalTime;
-struct timespec start, end;
+struct timespec firstTime, secondTime;
 int gpioSpeedometer = 12;
 
 BlynkTimer tmr;
@@ -74,18 +73,6 @@ void loop()
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
 
-void readPIN() {
-	//if (digitalRead(12) == LOW) {
-	//	cout << "GPIO PIN IS LOW" << endl;
-	//}
-	//else if (digitalRead(12) == HIGH) {
-	//	cout << "GPIO PIN IS HIGH" << endl;
-	//}
-	//else {};
-	int pinstatus = digitalRead(12);
-	std::cout << "Pin status of 12 is: " << pinstatus << "." << std::endl;
-}
-
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
@@ -97,7 +84,7 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
     //time(&currentTime_1); // sets currentTime_1 to current time
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
 	wheelSensorGoLowCounter++;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
   }
@@ -105,15 +92,15 @@ void speedometerFunction(){
     //time(&currentTime_2);
 	//printf("currentTime_2 %s", ctime(&currentTime_2));
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
-	totalTime = end.tv_nsec - start.tv_nsec;
+	totalTime = secondTime.tv_nsec - firstTime.tv_nsec;
 	std::cout << "timeDifferenceSeconds:" << totalTime << std::endl;
     speedometerReadingCalculation(timeDifferenceSeconds);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
     //time(&currentTime_1);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
     wheelSensorGoLowCounter = 1;
   }
 }
