@@ -88,18 +88,20 @@ void speedometerFunction(){
 	//printf("currentTime_1 %s", ctime(&currentTime_1));
 	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &firstTime);
 	firstTime = clock();
+	std::cout << "time 1" << firstTime << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
   else if(wheelSensorGoLowCounter == 2){
-	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
     //time(&currentTime_2);
 	//printf("currentTime_2 %s", ctime(&currentTime_2));
     //timeDifferenceSeconds = difftime(currentTime_2,currentTime_1);
 	//clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &secondTime);
 	//timeDifferenceSeconds = double(currentTime_2 - currentTime_1);
 	firstTime = clock() - firstTime;
-	totalTime = firstTime/(CLOCKS_PER_SEC);
+	std::cout << "time 2" << firstTime << std::endl;
+	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
+	totalTime = firstTime/double(CLOCKS_PER_SEC);
 	//totalLongTime = secondTime.tv_sec - firstTime.tv_sec;
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
