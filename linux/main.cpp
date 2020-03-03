@@ -1,6 +1,5 @@
 /**
  * g++ llv3.cpp lidarlite_v3.cpp -I . -o llv3.out
- * ./blynk --token=fvgRS5ENeJVCVi53MyPXRc7e7NFvNlpX
  * @file       main.cpp
  * @authors    John Arena, Shamim Babul, Rona Kosumi, Ionut Rotariu
  * @license    This project is NOT released under any license.
@@ -16,17 +15,7 @@
 #endif
 #include <BlynkSocket.h>
 #include <BlynkOptionsParser.h>
-#include <linux/types.h>
-#include <cstdio>
 
-#include <lidarlite_v3.h>
-#include <iostream>
-#include <fstream>
-#include <chrono>	
-
-using namespace std;
-
-LIDARLite_v3 myLidarLite;
 
 static BlynkTransportSocket _blynkTransport;
 BlynkSocket Blynk(_blynkTransport);
@@ -43,13 +32,21 @@ static uint16_t port;
 void readSpeedometerSignal();
 void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
+void UpdateLidar();
 #endif
 
 #include <time.h> /* Will be used for MPH */
 #include <cmath>
 #include <iostream>
 #include <iomanip>      
-//using namespace std;
+#include <linux/types.h>
+#include <cstdio>
+#include <lidarlite_v3.h>
+#include <iostream>
+#include <fstream>
+#include <chrono>	
+
+using namespace std;
 
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
@@ -57,6 +54,8 @@ double totalTime;
 clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 
+
+LIDARLite_v3 myLidarLite;
 BlynkTimer tmr;
 
 BLYNK_WRITE(V1)
@@ -75,27 +74,12 @@ void setup()
   tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
   //tmr.setInterval(5000L, readPIN); // Testing how to read pin function
 
-    // Initialize i2c peripheral in the cpu core
-    myLidarLite.i2c_init();
 
-    // Optionally configure LIDAR-Lite
-    myLidarLite.configure(0);
+    myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
 
-}
 
-void UpdateLidar()
-{
-	__u16 distance;
-	__u8  busyFlag;
-	busyFlag = myLidarLite.getBusyFlag();
-	
-	if (busyFlag == 0x00)
-	{
-		myLidarLite.takeRange();
-		distance = myLidarLite.readDistance();
-		cout << "Distance: "<<distance<<" cm"<<endl;
-		Blynk.virtualWrite(V20, (int)distance);
-        }
+    myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
+
 }
 
 void loop()
@@ -140,6 +124,21 @@ void speedometerFunction(){
 
 void speedometerReadingCalculation(double totalTime){
 	milesPerHour = (5* 2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
+}
+
+void UpdateLidar()
+{
+	__u16 distance;
+	__u8  busyFlag;
+	busyFlag = myLidarLite.getBusyFlag();
+
+	if (busyFlag == 0x00)
+	{
+		myLidarLite.takeRange();
+		distance = myLidarLite.readDistance();
+		cout << "Distance: " << distance << " cm" << endl;
+		Blynk.virtualWrite(V20, (int)distance);
+	}
 }
 
 int main(int argc, char* argv[])
