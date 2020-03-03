@@ -60,7 +60,7 @@ void setup()
     });
     
   pinMode(12, INPUT); // GPIO 12, pin 32
-  tmr.setInterval(500L,readSpeedometerSignal); // Call every .5 seconds
+  tmr.setInterval(100L,readSpeedometerSignal); // Call every .1 seconds
   //tmr.setInterval(5000L, readPIN); // Testing how to read pin function
 
 }
