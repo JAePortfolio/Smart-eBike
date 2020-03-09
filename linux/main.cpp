@@ -69,13 +69,16 @@ void setup()
     tmr.setInterval(1000, [](){
       Blynk.virtualWrite(V0, BlynkMillis()/1000);
     });
-    
-  pinMode(12, INPUT); // GPIO 12, pin 32
-  tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
-  //tmr.setInterval(5000L, readPIN); // Testing how to read pin function
+	
+	pinMode(12, INPUT); // GPIO 12, pin 32
+  //tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
 
+	GPIO.add_event_detect(12, GPIO_FALLING, bouncetime=930); // Testing interrupt
+	if (GPIO.event_detected(12)) {
+		readSpeedometerSignal();
+	}
 
-    myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
+	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
 
 
     myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
