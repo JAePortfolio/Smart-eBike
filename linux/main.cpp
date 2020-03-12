@@ -45,7 +45,7 @@ void UpdateLidar();
 #include <iostream>
 #include <fstream>
 #include <chrono>	
-#include <linux/gpio.h>
+//#include <linux/gpio.h>
 
 using namespace std;
 
@@ -54,6 +54,7 @@ double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
 clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
+
 
 
 LIDARLite_v3 myLidarLite;
@@ -72,14 +73,17 @@ void setup()
     });
 	
 	pinMode(12, INPUT); // GPIO 12, pin 32
-  //tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
+	//tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
 
-	GPIO.add_event_detect(12, GPIO_FALLING, bouncetime=930); // Testing interrupt
-	if (GPIO.event_detected(12)) {
-		readSpeedometerSignal();
-	}
+	//GPIO.add_event_detect(12, GPIO_FALLING, bouncetime=930); // Testing interrupt
+	//if (GPIO.event_detected(12)) {
+	//	readSpeedometerSignal();
+	//}
+
+	attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
 
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
+
 
 
     myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
