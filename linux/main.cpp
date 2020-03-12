@@ -45,7 +45,7 @@ void UpdateLidar();
 #include <iostream>
 #include <fstream>
 #include <chrono>	
-#include <gpio.h>
+#include <linux/gpio.h>
 
 using namespace std;
 
