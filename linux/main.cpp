@@ -46,6 +46,7 @@ void UpdateLidar();
 #include <fstream>
 #include <chrono>	
 //#include <linux/gpio.h>
+#include <wiringPi.h>
 
 using namespace std;
 
@@ -55,7 +56,7 @@ double totalTime;
 clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 
-
+int wiringPiSetupGpio(void);
 
 LIDARLite_v3 myLidarLite;
 BlynkTimer tmr;
