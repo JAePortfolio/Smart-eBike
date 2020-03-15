@@ -105,7 +105,7 @@ void readSpeedometerSignal(){
 	  speedometerFunction();
 	  std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
 	  count++;
-	  delay(928);
+	  //delay(928);
     }
 }
 
