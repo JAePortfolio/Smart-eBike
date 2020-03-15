@@ -81,7 +81,7 @@ void setup()
 	//	readSpeedometerSignal();
 	//}
 
-	attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
+	//attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
 
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
 
