@@ -99,11 +99,13 @@ void loop()
 }
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
-
+int count = 0;
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
-	  std::cout << "GPIO PIN is LOW" << std::endl;
+	  std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
+	  count++;
+	  delay(928);
     }
 }
 
