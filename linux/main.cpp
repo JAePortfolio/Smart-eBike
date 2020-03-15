@@ -95,7 +95,7 @@ void loop()
 {
     Blynk.run();
     tmr.run();
-    UpdateLidar();
+    //UpdateLidar();
 }
 
 /* DECLARE GLOBAL VARIABLES, LIBRARIES AND PIN MODES ABOVE HERE. WRITE FUNCTIONS BELOW */
