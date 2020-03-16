@@ -137,7 +137,7 @@ void speedometerFunction(){
 	std::cout << "time 2: " << currentTime_2 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = (currentTime_2 - currentTime_1) * 1e-3; //milliseconds to seconds
-	totalTime = diffTime(currentTime_2, currentTime_1);
+	totalTime = difftime(currentTime_2, currentTime_1);
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
