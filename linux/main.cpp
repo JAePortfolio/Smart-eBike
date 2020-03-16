@@ -53,9 +53,9 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
-clock_t currentTime_1, currentTime_2;
+//clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
-
+time_t currentTime_1, currentTime_2;
 int wiringPiSetupGpio(void);
 
 LIDARLite_v3 myLidarLite;
@@ -111,14 +111,17 @@ void readSpeedometerSignal(){
 
 void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
-	currentTime_1 = clock(); // Records time of reading
-	std::cout << "time 1: " << currentTime_1 << std::endl;
+	//currentTime_1 = clock(); // Records time of reading
+	  time(&currentTime_1);
+	  std::cout << "time 1: " << currentTime_1 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
   else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
-	  currentTime_2 = clock();
-	  totalTime = (currentTime_2 - currentTime_1); // milliseconds
+	  //currentTime_2 = clock();
+	  time(&currentTime_2);
+	  //totalTime = (currentTime_2 - currentTime_1); // milliseconds
+	  totalTime = difftime(currentTime_2, currentTime_1);
 	  std::cout << "Total Time: " << totalTime << std::endl;
 	  if (totalTime > 92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
@@ -129,10 +132,12 @@ void speedometerFunction(){
 	  }
   }
   else if(wheelSensorGoLowCounter == 10){
-	currentTime_2 = clock();
+	//currentTime_2 = clock();
+	  time(&currentTime_2);
 	std::cout << "time 2: " << currentTime_2 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
-	totalTime = (currentTime_2 - currentTime_1) * 1e-3; //milliseconds to seconds
+	//totalTime = (currentTime_2 - currentTime_1) * 1e-3; //milliseconds to seconds
+	totalTime = diffTime(currentTime_2, currentTime_1);
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
