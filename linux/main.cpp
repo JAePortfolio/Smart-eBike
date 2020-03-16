@@ -103,8 +103,8 @@ int count = 0;
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
 	  speedometerFunction();
-	  std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
-	  count++;
+	  //std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
+	  //count++;
 	  //delay(928);
     }
 }
@@ -117,7 +117,16 @@ void speedometerFunction(){
 	wheelSensorGoLowCounter++;
   }
   else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
-	  wheelSensorGoLowCounter++;
+	  currentTime_2 = clock();
+	  totalTime = (currentTime_2 - currentTime_1); // milliseconds
+	  std::cout << "Total Time: " << totalTime << std::endl;
+	  if (totalTime > 92) { // Debouncing protections
+		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
+		  wheelSensorGoLowCounter++;
+	  }
+	  else {
+		  std::cout << "Debounce error detected, not counting" << endl;
+	  }
   }
   else if(wheelSensorGoLowCounter == 10){
 	currentTime_2 = clock();
