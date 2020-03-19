@@ -122,10 +122,9 @@ void speedometerFunction(){
 	  //time(&currentTime_2);
 	  totalTime = (currentTime_2 - currentTime_1);
 	  totalTime = totalTime / CLOCKS_PER_SEC;
-	  totalTime = totalTime * 1e-3; // milliseconds
 	  //totalTime = difftime(currentTime_2, currentTime_1);
 	  std::cout << "Total Time: " << totalTime << std::endl;
-	  if (totalTime > 92) { // Debouncing protections
+	  if (totalTime > .92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
 	  }
@@ -141,7 +140,6 @@ void speedometerFunction(){
 	//totalTime = difftime(currentTime_2, currentTime_1);
 	totalTime = (currentTime_2 - currentTime_1);
 	totalTime = totalTime / CLOCKS_PER_SEC;
-	totalTime = totalTime * 1e-3; // milliseconds
 	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
