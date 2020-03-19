@@ -125,7 +125,7 @@ void speedometerFunction(){
 	  totalTime = totalTime * 1e-3; // milliseconds
 	  //totalTime = difftime(currentTime_2, currentTime_1);
 	  std::cout << "Total Time: " << totalTime << std::endl;
-	  if (totalTime > .92) { // Debouncing protections
+	  if (totalTime > 92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
 	  }
