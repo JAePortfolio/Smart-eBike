@@ -54,9 +54,10 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
-clock_t currentTime_1, currentTime_2;
+//clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 //time_t currentTime_1, currentTime_2;
+
 int wiringPiSetupGpio(void);
 
 LIDARLite_v3 myLidarLite;
@@ -112,19 +113,22 @@ void readSpeedometerSignal(){
 
 void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
-	currentTime_1 = clock(); // Records time of reading
+	//currentTime_1 = clock(); // Records time of reading
 	  //time(&currentTime_1);
+	  auto currentTime_1 = std::chrono::steady_clock::now();
 	  std::cout << "time 1: " << currentTime_1 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
   else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
-	  currentTime_2 = clock();
+	  //currentTime_2 = clock();
 	  //time(&currentTime_2);
-	  totalTime = (currentTime_2 - currentTime_1);
-	  totalTime = totalTime / CLOCKS_PER_SEC;
+	  //totalTime = (currentTime_2 - currentTime_1);
+	  //totalTime = totalTime / CLOCKS_PER_SEC;
 	  //totalTime = difftime(currentTime_2, currentTime_1);
-	  std::cout << "Total Time: " << totalTime << std::endl;
+	  auto currentTime_2 = std::chrono::steady_clock::now();
+	  std::chrono::duration<double> totalTime = currentTime_2 - currentTime_1;
+	  std::cout << "Total Time ms: " << totalTime.count() << std::endl;
 	  if (totalTime > .92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
@@ -134,14 +138,16 @@ void speedometerFunction(){
 	  }
   }
   else if(wheelSensorGoLowCounter == 10){
-	currentTime_2 = clock();
+	//currentTime_2 = clock();
 	//time(&currentTime_2);
-	std::cout << "time 2: " << currentTime_2 << std::endl;
+	auto currentTime_2 = std::chrono::steady_clock::now();
+	std::chrono::duration<double> totalTime = currentTime_2 - currentTime_1;
+	std::cout << "time 2: " << currentTime_2.count() << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = difftime(currentTime_2, currentTime_1);
-	totalTime = (currentTime_2 - currentTime_1);
-	totalTime = totalTime / CLOCKS_PER_SEC;
-	std::cout << "timeDifferenceSeconds:" << totalTime  << std::endl;
+	//totalTime = (currentTime_2 - currentTime_1) * 1e3;
+	//totalTime = totalTime / CLOCKS_PER_SEC;
+	std::cout << "timeDifferenceSeconds:" << totalTime.count()  << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
