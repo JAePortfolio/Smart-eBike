@@ -74,7 +74,7 @@ void setup()
     });
 	
 	pinMode(12, INPUT); // GPIO 12, pin 32
-	tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
+	//tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
 
 	//GPIO.add_event_detect(12, GPIO_FALLING, bouncetime=930); // Testing interrupt
 	//if (GPIO.event_detected(12)) {
@@ -82,7 +82,7 @@ void setup()
 	//}
 
 	//attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
-	//wiringPiISR(12, INT_EDGE_FALLING, &readSpeedometerSignal);
+	wiringPiISR(12, INT_EDGE_FALLING, &readSpeedometerSignal);
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
 
 
