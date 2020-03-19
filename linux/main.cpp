@@ -36,6 +36,7 @@ void UpdateLidar();
 #endif
 
 #include <time.h> /* Will be used for MPH */
+#include <stdio.h> 
 #include <cmath>
 #include <iostream>
 #include <iomanip>      
@@ -53,9 +54,9 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
-//clock_t currentTime_1, currentTime_2;
+clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
-time_t currentTime_1, currentTime_2;
+//time_t currentTime_1, currentTime_2;
 int wiringPiSetupGpio(void);
 
 LIDARLite_v3 myLidarLite;
@@ -133,8 +134,8 @@ void speedometerFunction(){
 	  }
   }
   else if(wheelSensorGoLowCounter == 10){
-	//currentTime_2 = clock();
-	  time(&currentTime_2);
+	currentTime_2 = clock();
+	//time(&currentTime_2);
 	std::cout << "time 2: " << currentTime_2 << std::endl;
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = difftime(currentTime_2, currentTime_1);
