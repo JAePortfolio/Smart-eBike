@@ -38,7 +38,6 @@ void UpdateLidar();
 #include <time.h> /* Will be used for MPH */
 #include <stdio.h> 
 #include <cmath>
-#include <iostream>
 #include <iomanip>      
 #include <linux/types.h>
 #include <cstdio>
@@ -46,7 +45,7 @@ void UpdateLidar();
 #include <iostream>
 #include <fstream>
 #include <chrono>	
-//#include <linux/gpio.h>
+#include <unistd.h>
 #include <wiringPi.h>
 
 using namespace std;
@@ -104,7 +103,10 @@ void loop()
 int count = 0;
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
+	  auto start = chrono::steady_clock::now();
 	  speedometerFunction();
+	  auto end = chrono::steady_clock::now();
+	  cout << "duration" << chrono::duration_cast<chrono::milliseconds> << endl;
 	  //std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
 	  //count++;
 	  //delay(928);
