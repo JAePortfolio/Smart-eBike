@@ -56,7 +56,9 @@ double totalTime;
 //clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 //time_t currentTime_1, currentTime_2;
-auto currentTime_1 = 0, currentTime_2 = 0, totalDuration = 0;
+auto currentTime_1 = std::chrono::steady_clock::now();
+auto currentTime_2 = std::chrono::steady_clock::now();
+auto totalDuration = std::chrono::steady_clock::now();
 /*
 extern std::chrono::high_resolution_clock::time_point currentTime_1;
 extern std::chrono::high_resolution_clock::time_point currentTime_2;
