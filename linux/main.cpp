@@ -56,6 +56,7 @@ double totalTime;
 //clock_t currentTime_1, currentTime_2;
 int gpioSpeedometer = 12;
 //time_t currentTime_1, currentTime_2;
+auto currentTime_1, currentTime_2, totalDuration;
 
 int wiringPiSetupGpio(void);
 
@@ -114,7 +115,7 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
 	//currentTime_1 = clock(); // Records time of reading
 	  //time(&currentTime_1);
-	auto currentTime_1 = std::chrono::steady_clock::now();
+	currentTime_1 = std::chrono::steady_clock::now();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
@@ -124,8 +125,8 @@ void speedometerFunction(){
 	  //totalTime = (currentTime_2 - currentTime_1);
 	  //totalTime = totalTime / CLOCKS_PER_SEC;
 	  //totalTime = difftime(currentTime_2, currentTime_1);
-	  auto currentTime_2 = std::chrono::steady_clock::now();
-	  auto totalDuration = currentTime_2 - currentTime_1;
+	  currentTime_2 = std::chrono::steady_clock::now();
+	  totalDuration = currentTime_2 - currentTime_1;
 	  totalTime = std::chrono::duration<double>(totalDuration).count();
 	  if (totalTime > 92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
@@ -138,8 +139,8 @@ void speedometerFunction(){
   else if(wheelSensorGoLowCounter == 10){
 	//currentTime_2 = clock();
 	//time(&currentTime_2);
-	auto currentTime_2 = std::chrono::steady_clock::now();
-	auto totalDuration = currentTime_2 - currentTime_1;
+	currentTime_2 = std::chrono::steady_clock::now();
+	totalDuration = currentTime_2 - currentTime_1;
 	totalTime = std::chrono::duration<double>(totalDuration).count();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = difftime(currentTime_2, currentTime_1);
