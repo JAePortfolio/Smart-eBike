@@ -57,7 +57,9 @@ double totalTime;
 int gpioSpeedometer = 12;
 //time_t currentTime_1, currentTime_2;
 auto currentTime_1, currentTime_2, totalDuration;
-
+extern std::chrono::high_resolution_clock::time_point currentTime_1;
+extern std::chrono::high_resolution_clock::time_point currentTime_2;
+extern std::chrono::high_resolution_clock::time_point totalDuration;
 int wiringPiSetupGpio(void);
 
 LIDARLite_v3 myLidarLite;
