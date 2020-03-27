@@ -103,10 +103,7 @@ void loop()
 int count = 0;
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
-	  auto start = chrono::steady_clock::now();
 	  speedometerFunction();
-	  auto end = chrono::steady_clock::now();
-	  cout << "duration" << chrono::duration_cast<chrono::milliseconds> << endl;
 	  //std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
 	  //count++;
 	  //delay(928);
@@ -117,8 +114,7 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
 	//currentTime_1 = clock(); // Records time of reading
 	  //time(&currentTime_1);
-	  auto currentTime_1 = std::chrono::steady_clock::now();
-	  std::cout << "time 1: " << currentTime_1 << std::endl;
+	auto currentTime_1 = std::chrono::steady_clock::now();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
@@ -129,9 +125,9 @@ void speedometerFunction(){
 	  //totalTime = totalTime / CLOCKS_PER_SEC;
 	  //totalTime = difftime(currentTime_2, currentTime_1);
 	  auto currentTime_2 = std::chrono::steady_clock::now();
-	  std::chrono::duration<double> totalTime = currentTime_2 - currentTime_1;
-	  std::cout << "Total Time ms: " << totalTime.count() << std::endl;
-	  if (totalTime > .92) { // Debouncing protections
+	  auto totalDuration = currentTime_2 - currentTime_1;
+	  totalTime = std::chrono::duration<double>(totalDuration).count();
+	  if (totalTime > 92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
 	  }
@@ -143,13 +139,13 @@ void speedometerFunction(){
 	//currentTime_2 = clock();
 	//time(&currentTime_2);
 	auto currentTime_2 = std::chrono::steady_clock::now();
-	std::chrono::duration<double> totalTime = currentTime_2 - currentTime_1;
-	std::cout << "time 2: " << currentTime_2.count() << std::endl;
+	auto totalDuration = currentTime_2 - currentTime_1;
+	totalTime = std::chrono::duration<double>(totalDuration).count();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = difftime(currentTime_2, currentTime_1);
 	//totalTime = (currentTime_2 - currentTime_1) * 1e3;
 	//totalTime = totalTime / CLOCKS_PER_SEC;
-	std::cout << "timeDifferenceSeconds:" << totalTime.count()  << std::endl;
+	std::cout << "timeDifferenceSeconds:" << totalTime << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
