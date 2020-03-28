@@ -32,8 +32,13 @@ static uint16_t port;
 void readSpeedometerSignal();
 void speedometerFunction();
 void speedometerReadingCalculation(double totalTime);
+void turnOnLeftTurnSignal();
+void turnOnRightTurnSignal();
 void UpdateLidar();
 #endif
+
+WidgetLED led1(V16);
+WidgetLED led2(V19);
 
 #include <time.h> /* Will be used for MPH */
 #include <stdio.h> 
@@ -54,16 +59,20 @@ int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
 //clock_t currentTime_1, currentTime_2;
-int gpioSpeedometer = 12;
+
 //time_t currentTime_1, currentTime_2;
-auto currentTime_1 = std::chrono::steady_clock::now();
-auto currentTime_2 = std::chrono::steady_clock::now();
-auto totalDuration = std::chrono::steady_clock::now();
+//auto currentTime_1 = std::chrono::steady_clock::now();
+//auto currentTime_2 = std::chrono::steady_clock::now();
+//auto totalDuration = std::chrono::steady_clock::now();
 /*
 extern std::chrono::high_resolution_clock::time_point currentTime_1;
 extern std::chrono::high_resolution_clock::time_point currentTime_2;
 extern std::chrono::high_resolution_clock::time_point totalDuration;*/
-int wiringPiSetupGpio(void);
+
+std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2, totalDuration;
+int gpioSpeedometer = 12;
+int gpioRightTurnSignal = 16;
+int gpioLeftTurnSignal = 19;
 
 LIDARLite_v3 myLidarLite;
 BlynkTimer tmr;
@@ -81,6 +90,8 @@ void setup()
     });
 	
 	pinMode(12, INPUT); // GPIO 12, pin 32
+	pinMode(16, INPUT); // GPIO 16, pin 36
+	pinMode(19, INPUT); // GPIO 19, pin 35
 	//tmr.setInterval(50L,readSpeedometerSignal); // Call every .05 seconds
 
 	//GPIO.add_event_detect(12, GPIO_FALLING, bouncetime=930); // Testing interrupt
@@ -90,10 +101,10 @@ void setup()
 
 	//attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
 	wiringPiISR(12, INT_EDGE_FALLING, &readSpeedometerSignal);
+	wiringPiISR(16, INT_EDGE_BOTH, &turnOnRightTurnSignal);
+	wiringPiISR(19, INT_EDGE_BOTH, &turnOnLeftTurnSignal);
+
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
-
-
-
     myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
 
 }
@@ -120,7 +131,7 @@ void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
 	//currentTime_1 = clock(); // Records time of reading
 	  //time(&currentTime_1);
-	currentTime_1 = std::chrono::steady_clock::now();
+	currentTime_1 = std::chrono::high_resolution_clock::now();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
@@ -130,9 +141,10 @@ void speedometerFunction(){
 	  //totalTime = (currentTime_2 - currentTime_1);
 	  //totalTime = totalTime / CLOCKS_PER_SEC;
 	  //totalTime = difftime(currentTime_2, currentTime_1);
-	  currentTime_2 = std::chrono::steady_clock::now();
+	  currentTime_2 = std::chrono::high_resolution_clock::now();
 	  totalDuration = currentTime_2 - currentTime_1;
 	  totalTime = std::chrono::duration<double>(totalDuration).count();
+	  cout << "debounce timing : " << totalTime << endl;
 	  if (totalTime > 92) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
@@ -144,14 +156,14 @@ void speedometerFunction(){
   else if(wheelSensorGoLowCounter == 10){
 	//currentTime_2 = clock();
 	//time(&currentTime_2);
-	currentTime_2 = std::chrono::steady_clock::now();
+	currentTime_2 = std::chrono::high_resolution_clock::now();
 	totalDuration = currentTime_2 - currentTime_1;
 	totalTime = std::chrono::duration<double>(totalDuration).count();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	//totalTime = difftime(currentTime_2, currentTime_1);
 	//totalTime = (currentTime_2 - currentTime_1) * 1e3;
 	//totalTime = totalTime / CLOCKS_PER_SEC;
-	std::cout << "timeDifferenceSeconds:" << totalTime << std::endl;
+	std::cout << "timeDifferenceSeconds: " << totalTime << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
     Blynk.virtualWrite(V12,milesPerHour);
@@ -162,6 +174,24 @@ void speedometerFunction(){
 
 void speedometerReadingCalculation(double totalTime){
 	milesPerHour = (5* 2 * M_PI*(1.083) * 60 * 60) / (5280 * totalTime);
+}
+
+void turnOnRightTurnSignal() {
+	if (digitalRead(gpioRightTurnSignal) == 0) {
+		led1.off();
+	}
+	else {
+		led1.on();
+	}
+}
+
+void turnOnLeftTurnSignal() {
+	if (digitalRead(gpioLeftTurnSignal) == 0) {
+		led2.off();
+	}
+	else {
+		led2.on();
+	}
 }
 
 void UpdateLidar()
