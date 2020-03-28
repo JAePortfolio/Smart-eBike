@@ -146,7 +146,7 @@ void speedometerFunction(){
 	  totalDuration = currentTime_2 - currentTime_1;
 	  totalTime = std::chrono::duration<double>(totalDuration).count();
 	  cout << "debounce timing : " << totalTime << endl;
-	  if (totalTime > .92) { // Debouncing protections
+	  if (totalTime > .0927) { // Debouncing protections
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
 	  }
