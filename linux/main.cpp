@@ -69,7 +69,8 @@ extern std::chrono::high_resolution_clock::time_point currentTime_1;
 extern std::chrono::high_resolution_clock::time_point currentTime_2;
 extern std::chrono::high_resolution_clock::time_point totalDuration;*/
 
-std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2, totalDuration;
+std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2;
+std::chrono::duration<double> totalDuration;
 int gpioSpeedometer = 12;
 int gpioRightTurnSignal = 16;
 int gpioLeftTurnSignal = 19;
