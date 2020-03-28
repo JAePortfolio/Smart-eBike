@@ -158,8 +158,6 @@ void speedometerReadingCalculation(double totalTime){
 void turnOnRightTurnSignal() {
 	if (digitalRead(gpioRightTurnSignal) == 0) {
 		led1.off();
-		cout << "turn signal right LOW" << endl;
-
 	}
 	else {
 		led1.on();
@@ -169,7 +167,6 @@ void turnOnRightTurnSignal() {
 void turnOnLeftTurnSignal() {
 	if (digitalRead(gpioLeftTurnSignal) == 0) {
 		led2.off();
-		cout << "turn signal left LOW" << endl;
 	}
 	else {
 		led2.on();
