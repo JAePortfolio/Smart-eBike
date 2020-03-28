@@ -58,19 +58,9 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
-//clock_t currentTime_1, currentTime_2;
-
-//time_t currentTime_1, currentTime_2;
-//auto currentTime_1 = std::chrono::steady_clock::now();
-//auto currentTime_2 = std::chrono::steady_clock::now();
-//auto totalDuration = std::chrono::steady_clock::now();
-/*
-extern std::chrono::high_resolution_clock::time_point currentTime_1;
-extern std::chrono::high_resolution_clock::time_point currentTime_2;
-extern std::chrono::high_resolution_clock::time_point totalDuration;*/
-
 std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2;
 std::chrono::duration<double> totalDuration;
+
 int gpioSpeedometer = 12;
 int gpioRightTurnSignal = 16;
 int gpioLeftTurnSignal = 19;
@@ -130,18 +120,11 @@ void readSpeedometerSignal(){
 
 void speedometerFunction(){
   if(wheelSensorGoLowCounter == 1){
-	//currentTime_1 = clock(); // Records time of reading
-	  //time(&currentTime_1);
 	currentTime_1 = std::chrono::high_resolution_clock::now();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	wheelSensorGoLowCounter++;
   }
   else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
-	  //currentTime_2 = clock();
-	  //time(&currentTime_2);
-	  //totalTime = (currentTime_2 - currentTime_1);
-	  //totalTime = totalTime / CLOCKS_PER_SEC;
-	  //totalTime = difftime(currentTime_2, currentTime_1);
 	  currentTime_2 = std::chrono::high_resolution_clock::now();
 	  totalDuration = currentTime_2 - currentTime_1;
 	  totalTime = std::chrono::duration<double>(totalDuration).count();
@@ -155,15 +138,10 @@ void speedometerFunction(){
 	  }
   }
   else if(wheelSensorGoLowCounter == 10){
-	//currentTime_2 = clock();
-	//time(&currentTime_2);
 	currentTime_2 = std::chrono::high_resolution_clock::now();
 	totalDuration = currentTime_2 - currentTime_1;
 	totalTime = std::chrono::duration<double>(totalDuration).count();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
-	//totalTime = difftime(currentTime_2, currentTime_1);
-	//totalTime = (currentTime_2 - currentTime_1) * 1e3;
-	//totalTime = totalTime / CLOCKS_PER_SEC;
 	std::cout << "timeDifferenceSeconds: " << totalTime << std::endl;
     speedometerReadingCalculation(totalTime);
 	std::cout << "MPH:" << milesPerHour << std::endl;
@@ -180,6 +158,8 @@ void speedometerReadingCalculation(double totalTime){
 void turnOnRightTurnSignal() {
 	if (digitalRead(gpioRightTurnSignal) == 0) {
 		led1.off();
+		cout << "turn signal right LOW" << endl;
+
 	}
 	else {
 		led1.on();
@@ -189,6 +169,7 @@ void turnOnRightTurnSignal() {
 void turnOnLeftTurnSignal() {
 	if (digitalRead(gpioLeftTurnSignal) == 0) {
 		led2.off();
+		cout << "turn signal left LOW" << endl;
 	}
 	else {
 		led2.on();
