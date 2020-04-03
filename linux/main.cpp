@@ -30,7 +30,7 @@ static uint16_t port;
 #ifndef OUR_FUNCTION_HEADERS_
 #define OUR_FUNCTION_HEADERS_
 void readSpeedometerSignal();
-void speedometerFunction();
+void wheelRevolutionFunction();
 void speedometerReadingCalculation(double totalTime);
 void turnOnLeftTurnSignal();
 void turnOnRightTurnSignal();
@@ -111,14 +111,14 @@ void loop()
 int count = 0;
 void readSpeedometerSignal(){
   if(digitalRead(gpioSpeedometer) == 0){ // Active Low Hall Sensor
-	  speedometerFunction();
+	  wheelRevolutionFunction();
 	  //std::cout << "GPIO PIN is LOW - count: " << count << std::endl;
 	  //count++;
 	  //delay(928);
     }
 }
 
-void speedometerFunction(){
+void wheelRevolutionFunction(){
   if(wheelSensorGoLowCounter == 1){
 	currentTime_1 = std::chrono::high_resolution_clock::now();
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
@@ -129,7 +129,7 @@ void speedometerFunction(){
 	  totalDuration = currentTime_2 - currentTime_1;
 	  totalTime = std::chrono::duration<double>(totalDuration).count();
 	  cout << "debounce timing : " << totalTime << endl;
-	  if (totalTime > .0927) { // Debouncing protections
+	  if (totalTime > .0927) { // Debouncing protections (92.7ms)
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
 	  }
