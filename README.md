@@ -14,9 +14,9 @@ This project is a Smart eBike Conversion Kit. This is a kit that will allow the 
 ## Authors
 
 * **John Arena** - *Project Manager* - [JAePortfolio](https://github.com/JAePortfolio)
-* **Shamim Babul** - *Team Member* 
-* **Rona Kosumi** - *Team Member* - [RhonaK] (https://github.com/RhonaK)
-* **Ionut Rotariu** - *Team Member* 
+* **Shamim Babul** - *Team Member* - [Srobin22](https://github.com/Srobin22)
+* **Rona Kosumi** - *Team Member* - [RhonaK](https://github.com/RhonaK)
+* **Ionut Rotariu** - *Team Member* - [John201920](https://github.com/John201920)
 
 
 ## License
