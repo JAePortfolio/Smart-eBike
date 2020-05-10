@@ -35,6 +35,13 @@ void speedometerReadingCalculation(double totalTime);
 void turnOnLeftTurnSignal();
 void turnOnRightTurnSignal();
 void UpdateLidar();
+void initializeAdc();
+void initializeMotor();
+void changeSpeed(int dutyCycle);
+void configureMotorDriver();
+void convertToEight(unsigned char eightBits[],unsigned short sixteenBits);
+void brake();
+void changeSpeed();
 #endif
 
 WidgetLED led1(V16);
@@ -52,6 +59,8 @@ WidgetLED led2(V19);
 #include <chrono>	
 #include <unistd.h>
 #include <wiringPi.h>
+#include <wiringPiSPI.h>
+#include <mcp3004.h>//FOR ADC
 
 using namespace std;
 
@@ -67,7 +76,26 @@ int gpioLeftTurnSignal = 19;
 
 LIDARLite_v3 myLidarLite;
 BlynkTimer tmr;
+//Motor Driver Register Values Based on DRV8320 Register Table
+#define DRIVERCONTROL       0b1001000001000010
+#define GATEDRIVEHSREGISTER 0b1001101111111111
+#define GATEDRIVELSREGISTER 0b1010011111111111
+#define OCPCONTROLREGISTER  0b1010100101011001
+//PINS
+int gpioMotorPwm=24;
+int gpioMotorBrake=25;
+int gpioMotorEnable=26;
+//SPI virtual PIN where ADC value is stored
+int adcVirtualPin=100;
 
+int motorPwmDutyCycle=0;
+int motorChannel=1;//SPI channel 1
+int adcChannel=0;//SPI Channel 0
+int analogThrottleValue=0;
+char spiIn[2];
+int wetModeReduction=0;
+unsigned char spiOut[2];
+bool braking=false;
 BLYNK_WRITE(V1)
 {
     printf("Got a value: %s\n", param[0].asStr());
@@ -97,6 +125,13 @@ void setup()
 
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
     myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
+    
+    //Motor/Throttle Initialization 
+    initializeMotor();
+    initializeAdc();
+    configureMotorDriver();
+    
+    
 
 }
 
@@ -104,6 +139,7 @@ void loop()
 {
     Blynk.run();
     tmr.run();
+    changeSpeed();
     //UpdateLidar();
 }
 
@@ -188,6 +224,57 @@ void UpdateLidar()
 	}
 }
 
+void convertToEight(unsigned char eightBits[],unsigned short sixteenBits){
+  //Converts 16 bits to 2 8 bits
+  eightBits[0]=sixteenBits>>8;
+  eightBits[1]=sixteenBits & 0x00FF;
+}
+void configureMotorDriver(){
+  //Configures the SPI Channel
+  wiringPiSPISetup(motorChannel,1000000);
+  unsigned short config[]={DRIVERCONTROL,GATEDRIVEHSREGISTER,
+                           GATEDRIVELSREGISTER,OCPCONTROLREGISTER};
+  for (int i=0;i<4;i++){
+    //Sends the Register Values to the Motor Driver Chip
+    convertToEight(spiOut,config[i]);
+    wiringPiSPIDataRW(motorChannel,spiOut,2);
+  }
+}
+void initializeMotor(){
+  //Assigns all the pins for Motor Driver
+  pinMode(gpioMotorBrake,OUTPUT);//Pin for braking 
+  digitalWrite(gpioMotorBrake,1);//Initializes 1 to signal no-braking
+  pinMode(gpioMotorPwm,PWM_OUTPUT);//Pin to Send PWM signal
+  pwmWrite(gpioMotorPwm,motorPwmDutyCycle);//Sends current Duty Cycle
+}
+void initializeAdc(){
+  //Sets Up the ADC
+  mcp3004Setup(adcVirtualPin,adcChannel);
+}
+BLYNK_WRITE(V25){
+  int pinValue=param.asInt();//Read Pin Value
+  if(pinValue==0) wetModeReduction=0;//Sets to Dry Mode
+  else wetModeReduction=1;//Sets to wet Mode (cause speed Reduction)
+}
+void changeSpeed(){
+  //Change the speed by sending the current PWM duty cycle
+  motorPwmDutyCycle=analogRead(adcVirtualPin);
+  //Reduce to 60% if wet Mode is on
+  motorPwmDutyCycle-=(wetModeReduction*(int(motorPwmDutyCycle*0.4)));
+  pwmWrite(gpioMotorPwm,motorPwmDutyCycle);
+}
+void brake(){
+  //
+  if(!braking) {//If it is already breaking then disbale braking
+     digitalWrite(gpioMotorBrake,1);
+     braking=true;
+   }
+  else{//Else brake
+      digitalWrite(gpioMotorBrake,0);
+      braking=false;
+    }
+
+}
 int main(int argc, char* argv[])
 {
     parse_options(argc, argv, auth, serv, port);
