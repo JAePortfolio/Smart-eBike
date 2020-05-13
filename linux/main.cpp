@@ -67,10 +67,10 @@ using namespace std;
 int wheelSensorGoLowCounter = 1;
 double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
 double totalTime;
-std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2;
+std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2; // Chrono timing libraries, high resolution clock
 std::chrono::duration<double> totalDuration;
 
-int gpioSpeedometer = 12;
+int gpioSpeedometer = 12; // General Purpose Input Output Pins
 int gpioRightTurnSignal = 16;
 int gpioLeftTurnSignal = 19;
 
@@ -119,9 +119,9 @@ void setup()
 	//}
 
 	//attachInterrupt(digitalPinToInterrupt(12), readSpeedometerSignal, FALLING);
-	wiringPiISR(12, INT_EDGE_FALLING, &readSpeedometerSignal);
-	wiringPiISR(16, INT_EDGE_BOTH, &turnOnRightTurnSignal);
-	wiringPiISR(19, INT_EDGE_BOTH, &turnOnLeftTurnSignal);
+	wiringPiISR(12, INT_EDGE_FALLING, &readSpeedometerSignal); // Call readSpeedometerSignal
+	wiringPiISR(16, INT_EDGE_BOTH, &turnOnRightTurnSignal); // Call turnOnRightTurnSignal
+	wiringPiISR(19, INT_EDGE_BOTH, &turnOnLeftTurnSignal); // Call turnOnLeftTurnSignal
 
 	myLidarLite.i2c_init();     // Initialize i2c peripheral in the cpu core
     myLidarLite.configure(0);    // Optionally configure LIDAR-Lite
@@ -155,16 +155,15 @@ void readSpeedometerSignal(){
 }
 
 void wheelRevolutionFunction(){
-  if(wheelSensorGoLowCounter == 1){
-	currentTime_1 = std::chrono::high_resolution_clock::now();
-	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
+  if(wheelSensorGoLowCounter == 1){ // Check counter if first measurement
+	currentTime_1 = std::chrono::high_resolution_clock::now(); // Store time 1
 	wheelSensorGoLowCounter++;
   }
-  else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) {
-	  currentTime_2 = std::chrono::high_resolution_clock::now();
-	  totalDuration = currentTime_2 - currentTime_1;
-	  totalTime = std::chrono::duration<double>(totalDuration).count();
-	  cout << "debounce timing : " << totalTime << endl;
+  else if (wheelSensorGoLowCounter > 1 && wheelSensorGoLowCounter < 10) { // Check counter if measurement #2-9
+	  currentTime_2 = std::chrono::high_resolution_clock::now(); // Store time 2
+	  totalDuration = currentTime_2 - currentTime_1; // Time2-Time1=Duration
+	  totalTime = std::chrono::duration<double>(totalDuration).count(); // Convert to seconds and type double
+	  cout << "Duration Time : " << totalTime << endl;
 	  if (totalTime > .0927) { // Debouncing protections (92.7ms)
 		  std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 		  wheelSensorGoLowCounter++;
@@ -173,16 +172,16 @@ void wheelRevolutionFunction(){
 		  std::cout << "Debounce error detected, not counting" << endl;
 	  }
   }
-  else if(wheelSensorGoLowCounter == 10){
-	currentTime_2 = std::chrono::high_resolution_clock::now();
-	totalDuration = currentTime_2 - currentTime_1;
-	totalTime = std::chrono::duration<double>(totalDuration).count();
+  else if(wheelSensorGoLowCounter == 10){ // Check if final measurement
+	currentTime_2 = std::chrono::high_resolution_clock::now(); // Store time 2
+	totalDuration = currentTime_2 - currentTime_1; // Time2-Time1=Duration
+	totalTime = std::chrono::duration<double>(totalDuration).count(); // Total time from first to last measurement
 	std::cout << "wheelSensorGoLow:" << wheelSensorGoLowCounter << std::endl;
 	std::cout << "timeDifferenceSeconds: " << totalTime << std::endl;
-    speedometerReadingCalculation(totalTime);
+    speedometerReadingCalculation(totalTime); // Pass totalTime to MPH function
 	std::cout << "MPH:" << milesPerHour << std::endl;
-    Blynk.virtualWrite(V12,milesPerHour);
-	wheelSensorGoLowCounter = 1;
+    Blynk.virtualWrite(V12,milesPerHour); // Write value to gauge on Blynk
+	wheelSensorGoLowCounter = 1; // Reset counter
   }
   else{}
 }
