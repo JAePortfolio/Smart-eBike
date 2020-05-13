@@ -65,7 +65,7 @@ WidgetLED led2(V19);
 using namespace std;
 
 int wheelSensorGoLowCounter = 1;
-double timeDifferenceSeconds = 0.0, milesPerHour = 0.0;
+double milesPerHour = 0.0;
 double totalTime;
 std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_1, currentTime_2; // Chrono timing libraries, high resolution clock
 std::chrono::duration<double> totalDuration;
